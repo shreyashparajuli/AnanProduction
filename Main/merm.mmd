@@ -1,0 +1,46 @@
+graph TD
+    subgraph Power Supply
+        BAT[12V Battery] --> CHRG[Battery Charging Module]
+        CHRG --> DC[5V DC-DC Converter]
+    end
+
+    subgraph Main Controller
+        ESP[ESP32-CAM Module]
+        FTDI[FTDI Programmer]
+    end
+
+    subgraph Lock Mechanism
+        SERVO[Servo Motor MG996R]
+        LED1[Status LED]
+    end
+
+    subgraph Sensors
+        PIR[PIR Motion Sensor]
+        RFID[RFID RC522 Module]
+    end
+
+    %% Power Connections
+    DC -->|5V| ESP
+    DC -->|5V| SERVO
+    DC -->|5V| RFID
+    DC -->|5V| PIR
+
+    %% ESP32-CAM Connections
+    ESP -->|GPIO 12| SERVO
+    ESP -->|GPIO 13| LED1
+    ESP -->|GPIO 14| PIR
+    
+    %% RFID Connections
+    RFID -->|SDA - GPIO 5| ESP
+    RFID -->|SCK - GPIO 18| ESP
+    RFID -->|MOSI - GPIO 23| ESP
+    RFID -->|MISO - GPIO 19| ESP
+
+    %% FTDI Programmer Connections
+    FTDI -->|U0R - GPIO 3| ESP
+    FTDI -->|U0T - GPIO 1| ESP
+
+    style ESP fill:#f9f,stroke:#333,stroke-width:2px
+    style SERVO fill:#bbf,stroke:#333,stroke-width:2px
+    style RFID fill:#bfb,stroke:#333,stroke-width:2px
+    style PIR fill:#fbf,stroke:#333,stroke-width:2px
